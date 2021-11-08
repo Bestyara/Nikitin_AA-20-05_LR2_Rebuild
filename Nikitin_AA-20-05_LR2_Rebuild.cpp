@@ -69,7 +69,7 @@ void PrintPipe(const map <int, Pipe>& PipeMap) //Вывод данных о тр
 			cout << endl << "ID: " << i.first;
 			cout << endl << "Длина трубы: " << i.second.l;
 			cout << endl << "Диаметр трубы: " << i.second.d;
-			cout << endl << "Труба в ремонте:(0 - Нет, 1 - Да)" << i.second.repair << endl;
+			cout << endl << "Труба в ремонте:(0 - Нет, 1 - Да): " << i.second.repair << endl;
 		}
 	}
 	else
@@ -148,20 +148,27 @@ void mainmenu() {
 	cout << "0 - Выход" << endl << endl;
 }
 
-void savefile(const Pipe& p, const CompressorStation& cs, ofstream& filesave) {
-	if (p.d != 0) {
-		filesave << "Труба:" << endl;
-		filesave << p.d << endl;
-		filesave << p.l << endl;
+void savefile(const map <int, Pipe>& PipeMap, const map <int, CompressorStation>& CSMap, ofstream& filesave) {
+	if (PipeMap.size() != 0) {
+		for (auto& i : PipeMap) {
+			filesave << "Труба:" << endl;
+			filesave << i.first << endl;
+			filesave << i.second.l << endl;
+			filesave << i.second.d << endl;
+			filesave << i.second.repair << endl;
+		}
 	}
 	else
-		filesave << "Нет данных о трубе, пользователь наевся и спит" << endl;
-	if (cs.kol != 0) {
-		filesave << "Компрессорная станция:" << endl;
-		filesave << cs.name << endl;
-		filesave << cs.kol << endl;
-		filesave << cs.kolinwork << endl;
-		filesave << cs.effectiveness << endl;
+		filesave << "Нет данных о трубах" << endl;
+	if (CSMap.size() != 0) {
+		for (auto& i : CSMap) {
+			filesave << "Компрессорная станция:" << endl;
+			filesave << i.first << endl;
+			filesave << i.second.name << endl;
+			filesave << i.second.kol << endl;
+			filesave << i.second.kolinwork << endl;
+			filesave << i.second.effectiveness << endl;
+		}
 	}
 	else
 		filesave << "Нет данных о КС" << endl;
@@ -247,8 +254,11 @@ int main()
 			break;
 		}
 		case 6: {
-			ofstream filesave("loadfile.txt");
-			savefile(p, cs, filesave);
+			cout << endl << "Введите название файла: ";
+			string str;
+			cin >> str;
+			ofstream filesave(str + ".txt");
+			savefile(PipeMap, CSMap, filesave);
 			filesave.close();
 			break;
 		}
