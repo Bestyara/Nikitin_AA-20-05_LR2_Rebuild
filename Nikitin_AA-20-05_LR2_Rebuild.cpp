@@ -93,17 +93,13 @@ void PrintCompressorstation(const map <int, CompressorStation>& CSMap) //Выв�
 }
 
 void FixPipe(Pipe& p) { //Редактирование данных трубы
-	if (p.d != 0) {
-		p.repair = !p.repair;
-		if (p.repair == 0) {
-			cout << "Теперь труба не в ремонте" << endl;
-		}
-		if (p.repair == 1) {
-			cout << "Теперь труба в ремонте" << endl;
-		}
+	p.repair = !p.repair;
+	if (p.repair == 0) {
+		cout << "Теперь труба не в ремонте" << endl;
 	}
-	else
-		cout << "Труба не была добавлена" << endl;
+	if (p.repair == 1) {
+		cout << "Теперь труба в ремонте" << endl;
+	}
 }
 
 void FixStation(CompressorStation& cs) { //Редактирование данных о КС
@@ -229,7 +225,14 @@ int main()
 			break;
 		}
 		case 4: {
-			FixPipe(p);
+			cout << endl << "Введите ID трубы для редактирования: ";
+			i = proverkavvoda();
+			if (i < PipeMap.size()) {
+				FixPipe(PipeMap[i]);
+			}
+			else {
+				cout << "Введите другое значение" << endl;
+			}
 			break;
 		}
 		case 5: {
