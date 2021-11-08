@@ -5,6 +5,7 @@ using namespace std;
 #include "windows.h"
 #include <fstream>
 #include <map>
+#include <vector>
 
 class Pipe { //Структура трубы
 public:
@@ -25,7 +26,7 @@ int proverkavvoda() {
 	int a;
 	while (true) {
 		cin >> a;
-		if (cin.fail() || a < 0) {
+		if (cin.fail() || a < -1) {
 			cin.clear();
 			cin.ignore(32767, '\n');
 			cout << "Введите другое значение" << endl;
@@ -145,6 +146,8 @@ void mainmenu() {
 	cout << "5 - Редактировать КС" << endl;
 	cout << "6 - Сохранить" << endl;
 	cout << "7 - Загрузить" << endl;
+	cout << "8 - Удалить данные о трубах" << endl;
+	cout << "9 - Удалить данные о КС" << endl;
 	cout << "0 - Выход" << endl << endl;
 }
 
@@ -196,7 +199,7 @@ void loadfile(Pipe& p, CompressorStation& cs, ifstream& fileload) {
 	}
 }
 void proverkamenu(const int& menu) {
-	if ((menu > 7) || (menu < 0)) {
+	if ((menu > 9) || (menu < 0)) {
 		cout << "Введите другое число" << endl;
 	}
 }
@@ -216,58 +219,82 @@ int main()
 		menu = proverkavvoda();
 		proverkamenu(menu);
 		switch (menu) {
-		case 1: {
-			PipeMap.insert(pair <int, Pipe>(pipeid, AddPipe()));
-			pipeid++;
-			break;
-		}
-		case 2: {
-			CSMap.insert(pair <int, CompressorStation>(stationid, AddStation()));
-			stationid++;
-			break;
-		}
-		case 3: {
-			PrintPipe(PipeMap);
-			PrintCompressorstation(CSMap);
-			break;
-		}
-		case 4: {
-			cout << endl << "Введите ID трубы для редактирования: ";
-			i = proverkavvoda();
-			if (i < PipeMap.size()) {
-				FixPipe(PipeMap[i]);
+			case 1: {
+				PipeMap.insert(pair <int, Pipe>(pipeid, AddPipe()));
+				pipeid++;
+				break;
 			}
-			else {
-				cout << "Введите другое значение" << endl;
+			case 2: {
+				CSMap.insert(pair <int, CompressorStation>(stationid, AddStation()));
+				stationid++;
+				break;
 			}
-			break;
-		}
-		case 5: {
-			cout << endl << "Введите ID КС для редактирования: ";
-			j = proverkavvoda();
-			if (j < CSMap.size()) {
-				FixStation(CSMap[j]);
+			case 3: {
+				PrintPipe(PipeMap);
+				PrintCompressorstation(CSMap);
+				break;
 			}
-			else {
-				cout << "Введите другое значение" << endl;
+			case 4: {
+				cout << endl << "Введите ID трубы для редактирования: ";
+				i = proverkavvoda();
+				if (i < PipeMap.size()) {
+					FixPipe(PipeMap[i]);
+				}
+				else {
+					cout << "Введите другое значение" << endl;
+				}
+				break;
 			}
-			break;
-		}
-		case 6: {
-			cout << endl << "Введите название файла: ";
-			string str;
-			cin >> str;
-			ofstream filesave(str + ".txt");
-			savefile(PipeMap, CSMap, filesave);
-			filesave.close();
-			break;
-		}
-		case 7: {
-			ifstream fileload("loadfile.txt");
-			loadfile(p, cs, fileload);
-			fileload.close();
-			break;
-		}
+			case 5: {
+				cout << endl << "Введите ID КС для редактирования: ";
+				j = proverkavvoda();
+				if (j < CSMap.size()) {
+					FixStation(CSMap[j]);
+				}
+				else {
+					cout << "Введите другое значение" << endl;
+				}
+				break;
+			}
+			case 6: {
+				cout << endl << "Введите название файла: ";
+				string str;
+				cin >> str;
+				ofstream filesave(str + ".txt");
+				savefile(PipeMap, CSMap, filesave);
+				filesave.close();
+				break;
+			}
+			case 7: {
+				ifstream fileload("loadfile.txt");
+				loadfile(p, cs, fileload);
+				fileload.close();
+				break;
+			}
+			case 8: {
+				cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+				int ch = proverkavvoda();
+				/*vector <int> ind;*/
+				if (PipeMap.count(ch) !=0) {
+					while (ch != -1 && PipeMap.count(ch) != 0) {
+						PipeMap.erase(PipeMap.find(ch));
+						cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+						ch = proverkavvoda();
+					}
+				}
+			}
+			case 9: {
+				cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+				int ch = proverkavvoda();
+				/*vector <int> ind;*/
+				if (PipeMap.count(ch) != 0) {
+					while (ch != -1 && CSMap.count(ch) != 0) {
+						CSMap.erase(CSMap.find(ch));
+						cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+						ch = proverkavvoda();
+					}
+				}
+			}
 		}
 		system("pause");
 		system("cls");
