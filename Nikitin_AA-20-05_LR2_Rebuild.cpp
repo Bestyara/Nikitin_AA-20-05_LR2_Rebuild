@@ -6,32 +6,34 @@ using namespace std;
 #include <fstream>
 #include <map>
 #include <vector>
+#include "cs.h"
+#include "pipe.h"
 
-class Pipe { //Структура трубы
-public:
-	int id;
-	int d;
-	int l;
-	bool repair;
-	Pipe AddPipe();
-	void PrintPipe(const map <int, Pipe>&);
-	void FixPipe(Pipe&);
-	void DelPipe(map <int, Pipe>&);
-	void FindandFixPipe(map <int, Pipe>&);
-};
+//class Pipe { //Структура трубы
+//public:
+//	int id;
+//	int d;
+//	int l;
+//	bool repair;
+//	Pipe AddPipe();
+//	void PrintPipe(const map <int, Pipe>&);
+//	void FixPipe(Pipe&);
+//	void DelPipe(map <int, Pipe>&);
+//	void FindandFixPipe(map <int, Pipe>&);
+//};
 
-class CompressorStation { //Структура КС
-public:
-	int id;
-	string name;
-	int kol;
-	int kolinwork;
-	int effectiveness;
-	CompressorStation AddStation();
-	void PrintCompressorstation(const map <int, CompressorStation>&);
-	void FixStation(CompressorStation&);
-	void DelStation(map <int, CompressorStation>&);
-};
+//class CompressorStation { //Структура КС
+//public:
+//	int id;
+//	string name;
+//	int kol;
+//	int kolinwork;
+//	int effectiveness;
+//	CompressorStation AddStation();
+//	void PrintCompressorstation(const map <int, CompressorStation>&);
+//	void FixStation(CompressorStation&);
+//	void DelStation(map <int, CompressorStation>&);
+//};
 
 int proverkavvoda() {
 	int a;
