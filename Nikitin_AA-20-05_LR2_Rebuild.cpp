@@ -17,6 +17,7 @@ public:
 	void PrintPipe(const map <int, Pipe>&);
 	void FixPipe(Pipe&);
 	void DelPipe(map <int, Pipe>&);
+	void FindandFixPipe(map <int, Pipe>&);
 };
 
 class CompressorStation { //Структура КС
@@ -29,7 +30,7 @@ public:
 	CompressorStation AddStation();
 	void PrintCompressorstation(const map <int, CompressorStation>&);
 	void FixStation(CompressorStation&);
-	void DelStation();
+	void DelStation(map <int, CompressorStation>&);
 };
 
 int proverkavvoda() {
@@ -150,7 +151,6 @@ void CompressorStation::FixStation(CompressorStation& cs) { //Редактиро
 void Pipe::DelPipe(map <int, Pipe>& PipeMap) {
 	cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
 	int ch = proverkavvoda();
-	/*vector <int> ind;*/
 	if (PipeMap.count(ch) != 0) {
 		while (ch != -1 && PipeMap.count(ch) != 0) {
 			PipeMap.erase(PipeMap.find(ch));
@@ -158,8 +158,62 @@ void Pipe::DelPipe(map <int, Pipe>& PipeMap) {
 			ch = proverkavvoda();
 		}
 	}
+	else {
+		cout << endl << "Ошибка при вводе ID" << endl;
+	}
 }
 
+void CompressorStation::DelStation(map <int, CompressorStation>& CSMap) {
+	cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+	int ch = proverkavvoda();
+	if (CSMap.count(ch) != 0) {
+		while (ch != -1 && CSMap.count(ch) != 0) {
+		CSMap.erase(CSMap.find(ch));
+		cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+		ch = proverkavvoda();
+		}
+	}
+	else {
+		cout << endl << "Ошибка при вводе ID" << endl;
+	}
+}
+
+void Pipe::FindandFixPipe(map <int, Pipe>& PipeMap) {
+	cout << endl << "Данные о трубах, которые находятся в ремонте" << endl;
+	if (PipeMap.size() != 0) {
+		for (auto& i : PipeMap) {
+			if (i.second.repair == 1) {
+				cout << endl << "Труба";
+				cout << endl << "ID: " << i.first;
+				cout << endl << "Длина трубы: " << i.second.l;
+				cout << endl << "Диаметр трубы: " << i.second.d;
+				cout << endl << "Труба в ремонте:(0 - Нет, 1 - Да): " << i.second.repair << endl;
+			}
+		}
+	}
+	cout << endl << "Введите ID труб, данные о ремонте которых хотели бы изменить (для окончания ввода напишите -1):" << endl;
+	int ch; 
+	ch = proverkavvoda();
+	while (ch >= PipeMap.size()) {
+		cout << "Ошибка при вводе данных, введите другое значение" << endl;
+		ch = proverkavvoda();
+	}
+	while (ch != -1 && ch < PipeMap.size()) {
+		if (PipeMap[ch].repair == 0) {
+			PipeMap[ch].repair = 1;
+		}
+		else {
+			PipeMap[ch].repair = 0;
+		}
+		cout << endl << "Данные изменены" << endl;
+		cout << endl << "Введите ID труб, данные о ремонте которых хотели бы изменить (для окончания ввода напишите -1):" << endl;
+		ch = proverkavvoda();
+		while (ch >= PipeMap.size()) {
+			cout << "Ошибка при вводе данных, введите другое значение" << endl;
+			ch = proverkavvoda();
+		}
+	}
+}
 void mainmenu() {
 	cout << "Введите одно из представленных чисел" << endl;
 	cout << "1 - Добавить трубу" << endl;
@@ -296,29 +350,14 @@ int main()
 			}
 			case 8: {
 				p.DelPipe(PipeMap);
-				//cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
-				//int ch = proverkavvoda();
-				///*vector <int> ind;*/
-				//if (PipeMap.count(ch) !=0) {
-				//	while (ch != -1 && PipeMap.count(ch) != 0) {
-				//		PipeMap.erase(PipeMap.find(ch));
-				//		cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
-				//		ch = proverkavvoda();
-				//	}
-				//}
 				break;
 			}
 			case 9: {
-				cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
-				int ch = proverkavvoda();
-				/*vector <int> ind;*/
-				if (PipeMap.count(ch) != 0) {
-					while (ch != -1 && CSMap.count(ch) != 0) {
-						CSMap.erase(CSMap.find(ch));
-						cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
-						ch = proverkavvoda();
-					}
-				}
+				cs.DelStation(CSMap);
+				break;
+			}
+			case 10: {
+				p.FindandFixPipe(PipeMap);
 				break;
 			}
 		}
