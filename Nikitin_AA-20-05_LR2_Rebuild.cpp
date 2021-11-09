@@ -9,17 +9,27 @@ using namespace std;
 
 class Pipe { //Структура трубы
 public:
+	int id;
 	int d;
 	int l;
 	bool repair;
+	Pipe AddPipe();
+	void PrintPipe(const map <int, Pipe>&);
+	void FixPipe(Pipe&);
+	void DelPipe(map <int, Pipe>&);
 };
 
 class CompressorStation { //Структура КС
 public:
+	int id;
 	string name;
 	int kol;
 	int kolinwork;
 	int effectiveness;
+	CompressorStation AddStation();
+	void PrintCompressorstation(const map <int, CompressorStation>&);
+	void FixStation(CompressorStation&);
+	void DelStation();
 };
 
 int proverkavvoda() {
@@ -36,7 +46,7 @@ int proverkavvoda() {
 	}
 }
 
-Pipe AddPipe() { //Добавление трубы
+Pipe Pipe::AddPipe() { //Добавление трубы
 	Pipe p; // { 0, 1420, 200, };
 	cout << "Введите диаметр трубы: ";
 	p.d = proverkavvoda();
@@ -45,7 +55,7 @@ Pipe AddPipe() { //Добавление трубы
 	p.repair = 0;
 	return p;
 }
-CompressorStation AddStation() { //Добавление КС
+CompressorStation CompressorStation::AddStation() { //Добавление КС
 	CompressorStation cs;
 	cout << "Введите наименование: ";
 	cin.ignore(32767, '\n');//https://ravesli.com/urok-57-vvedenie-v-std-string/
@@ -62,7 +72,7 @@ CompressorStation AddStation() { //Добавление КС
 	cs.effectiveness = proverkavvoda();
 	return cs;
 }
-void PrintPipe(const map <int, Pipe>& PipeMap) //Вывод данных о трубе
+void Pipe::PrintPipe(const map <int, Pipe>& PipeMap) //Вывод данных о трубе
 {
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
@@ -77,7 +87,7 @@ void PrintPipe(const map <int, Pipe>& PipeMap) //Вывод данных о тр
 		cout << endl <<"Труба не была добавлена" << endl;
 }
 
-void PrintCompressorstation(const map <int, CompressorStation>& CSMap) //Вывод данных о КС
+void CompressorStation::PrintCompressorstation(const map <int, CompressorStation>& CSMap) //Вывод данных о КС
 {
 	if (CSMap.size() != 0) {
 		for (auto& i : CSMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
@@ -93,7 +103,7 @@ void PrintCompressorstation(const map <int, CompressorStation>& CSMap) //Выв�
 		cout << endl << "КС не была добавлена" << endl;
 }
 
-void FixPipe(Pipe& p) { //Редактирование данных трубы
+void Pipe::FixPipe(Pipe& p) { //Редактирование данных трубы
 	p.repair = !p.repair;
 	if (p.repair == 0) {
 		cout << "Теперь труба не в ремонте" << endl;
@@ -103,7 +113,7 @@ void FixPipe(Pipe& p) { //Редактирование данных трубы
 	}
 }
 
-void FixStation(CompressorStation& cs) { //Редактирование данных о КС
+void CompressorStation::FixStation(CompressorStation& cs) { //Редактирование данных о КС
 	int num;
 	cout << "Введите что нужно сделать (возобновить работу цехов, остановить работу цехов)" << endl;
 	cout << "1 - Возобновить работу цехов " << endl;
@@ -134,6 +144,19 @@ void FixStation(CompressorStation& cs) { //Редактирование данн
 	default:
 		cout << endl << "Ошибка при вводе значения";
 		break;
+	}
+}
+
+void Pipe::DelPipe(map <int, Pipe>& PipeMap) {
+	cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+	int ch = proverkavvoda();
+	/*vector <int> ind;*/
+	if (PipeMap.count(ch) != 0) {
+		while (ch != -1 && PipeMap.count(ch) != 0) {
+			PipeMap.erase(PipeMap.find(ch));
+			cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+			ch = proverkavvoda();
+		}
 	}
 }
 
@@ -220,25 +243,25 @@ int main()
 		proverkamenu(menu);
 		switch (menu) {
 			case 1: {
-				PipeMap.insert(pair <int, Pipe>(pipeid, AddPipe()));
+				PipeMap.insert(pair <int, Pipe>(pipeid, p.AddPipe()));
 				pipeid++;
 				break;
 			}
 			case 2: {
-				CSMap.insert(pair <int, CompressorStation>(stationid, AddStation()));
+				CSMap.insert(pair <int, CompressorStation>(stationid, cs.AddStation()));
 				stationid++;
 				break;
 			}
 			case 3: {
-				PrintPipe(PipeMap);
-				PrintCompressorstation(CSMap);
+				p.PrintPipe(PipeMap);
+				cs.PrintCompressorstation(CSMap);
 				break;
 			}
 			case 4: {
 				cout << endl << "Введите ID трубы для редактирования: ";
 				i = proverkavvoda();
 				if (i < PipeMap.size()) {
-					FixPipe(PipeMap[i]);
+					p.FixPipe(PipeMap[i]);
 				}
 				else {
 					cout << "Введите другое значение" << endl;
@@ -249,7 +272,7 @@ int main()
 				cout << endl << "Введите ID КС для редактирования: ";
 				j = proverkavvoda();
 				if (j < CSMap.size()) {
-					FixStation(CSMap[j]);
+					cs.FixStation(CSMap[j]);
 				}
 				else {
 					cout << "Введите другое значение" << endl;
@@ -272,16 +295,18 @@ int main()
 				break;
 			}
 			case 8: {
-				cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
-				int ch = proverkavvoda();
-				/*vector <int> ind;*/
-				if (PipeMap.count(ch) !=0) {
-					while (ch != -1 && PipeMap.count(ch) != 0) {
-						PipeMap.erase(PipeMap.find(ch));
-						cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
-						ch = proverkavvoda();
-					}
-				}
+				p.DelPipe(PipeMap);
+				//cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+				//int ch = proverkavvoda();
+				///*vector <int> ind;*/
+				//if (PipeMap.count(ch) !=0) {
+				//	while (ch != -1 && PipeMap.count(ch) != 0) {
+				//		PipeMap.erase(PipeMap.find(ch));
+				//		cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
+				//		ch = proverkavvoda();
+				//	}
+				//}
+				break;
 			}
 			case 9: {
 				cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
@@ -294,6 +319,7 @@ int main()
 						ch = proverkavvoda();
 					}
 				}
+				break;
 			}
 		}
 		system("pause");
