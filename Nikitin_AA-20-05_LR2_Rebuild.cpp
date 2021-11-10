@@ -49,7 +49,7 @@ int proverkavvoda() {
 	}
 }
 
-Pipe Pipe::AddPipe() { //Добавление трубы
+Pipe Pipe::AddPipe(){ //Добавление трубы
 	Pipe p; // { 0, 1420, 200, };
 	cout << "Введите диаметр трубы: ";
 	p.d = proverkavvoda();
@@ -230,7 +230,7 @@ void mainmenu() {
 	cout << "0 - Выход" << endl << endl;
 }
 
-void savefile(const map <int, Pipe>& PipeMap, const map <int, CompressorStation>& CSMap, ofstream& filesave) {
+void savefilepipe(const map <int, Pipe>& PipeMap, ofstream& filesave) {
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {
 			filesave << "Труба:" << endl;
@@ -242,6 +242,21 @@ void savefile(const map <int, Pipe>& PipeMap, const map <int, CompressorStation>
 	}
 	else
 		filesave << "Нет данных о трубах" << endl;
+	/*if (CSMap.size() != 0) {
+		for (auto& i : CSMap) {
+			filesave << "Компрессорная станция:" << endl;
+			filesave << i.first << endl;
+			filesave << i.second.name << endl;
+			filesave << i.second.kol << endl;
+			filesave << i.second.kolinwork << endl;
+			filesave << i.second.effectiveness << endl;
+		}
+	}
+	else
+		filesave << "Нет данных о КС" << endl;*/
+}
+
+void savefilestation(const map <int, CompressorStation>& CSMap, ofstream& filesave) {
 	if (CSMap.size() != 0) {
 		for (auto& i : CSMap) {
 			filesave << "Компрессорная станция:" << endl;
@@ -256,7 +271,7 @@ void savefile(const map <int, Pipe>& PipeMap, const map <int, CompressorStation>
 		filesave << "Нет данных о КС" << endl;
 }
 
-void loadfile(Pipe& p, CompressorStation& cs, ifstream& fileload) {
+void loadfilepipe(Pipe& p, CompressorStation& cs, ifstream& fileload) {
 	string str;
 	getline(fileload, str);
 	if (str == "Труба:") {
@@ -336,18 +351,27 @@ int main()
 				break;
 			}
 			case 6: {
-				cout << endl << "Введите название файла: ";
-				string str;
-				cin >> str;
-				ofstream filesave(str + ".txt");
-				savefile(PipeMap, CSMap, filesave);
+				cout << endl << "Введите название файла: " << endl;
+				string filenam;
+				cin >> filenam;
+				ofstream filesave(filenam + ".txt");
+				savefilepipe(PipeMap, filesave);
+				savefilestation(CSMap, filesave);
 				filesave.close();
 				break;
 			}
 			case 7: {
-				ifstream fileload("loadfile.txt");
-				loadfile(p, cs, fileload);
-				fileload.close();
+				cout << endl << "Введите название файла: " << endl;
+				string filenam;
+				cin >> filenam;
+				ifstream fileload(filenam + ".txt");
+				if (fileload.fail()) {
+					cout << "Файл  для считывания информации не был создан" << endl;
+				}
+				else {
+					loadfilepipe(p, cs, fileload);
+					fileload.close();
+				}
 				break;
 			}
 			case 8: {
