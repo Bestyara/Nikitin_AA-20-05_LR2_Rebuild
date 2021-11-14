@@ -9,32 +9,6 @@ using namespace std;
 #include "cs.h"
 #include "pipe.h"
 
-//class Pipe { //Структура трубы
-//public:
-//	int id;
-//	int d;
-//	int l;
-//	bool repair;
-//	Pipe AddPipe();
-//	void PrintPipe(const map <int, Pipe>&);
-//	void FixPipe(Pipe&);
-//	void DelPipe(map <int, Pipe>&);
-//	void FindandFixPipe(map <int, Pipe>&);
-//};
-
-//class CompressorStation { //Структура КС
-//public:
-//	int id;
-//	string name;
-//	int kol;
-//	int kolinwork;
-//	int effectiveness;
-//	CompressorStation AddStation();
-//	void PrintCompressorstation(const map <int, CompressorStation>&);
-//	void FixStation(CompressorStation&);
-//	void DelStation(map <int, CompressorStation>&);
-//};
-
 int proverkavvoda() {
 	int a;
 	while (true) {
@@ -180,8 +154,8 @@ void CompressorStation::DelStation(map <int, CompressorStation>& CSMap) {
 	}
 }
 
-void Pipe::FindandFixPipe(map <int, Pipe>& PipeMap) {
-	cout << endl << "Данные о трубах, которые находятся в ремонте" << endl;
+void Pipe::FindandFixPipe(map <int, Pipe>& PipeMap) {//поиск и пакетное редактирование труб
+	cout << endl << "Данные о трубах, которые находятся в ремонте: " << endl;
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {
 			if (i.second.repair == 1) {
@@ -196,11 +170,11 @@ void Pipe::FindandFixPipe(map <int, Pipe>& PipeMap) {
 	cout << endl << "Введите ID труб, данные о ремонте которых хотели бы изменить (для окончания ввода напишите -1):" << endl;
 	int ch; 
 	ch = proverkavvoda();
-	while (ch >= PipeMap.size()) {
-		cout << "Ошибка при вводе данных, введите другое значение" << endl;
+	while (PipeMap.count(ch) == 0 && ch != -1) {
+		cout << "Ошибка при вводе данных, данные о трубе с данным ID не найдены, введите другое значение" << endl;
 		ch = proverkavvoda();
 	}
-	while (ch != -1 && ch < PipeMap.size()) {
+	while (ch != -1 && PipeMap.count(ch) != 0) {
 		if (PipeMap[ch].repair == 0) {
 			PipeMap[ch].repair = 1;
 		}
@@ -210,9 +184,159 @@ void Pipe::FindandFixPipe(map <int, Pipe>& PipeMap) {
 		cout << endl << "Данные изменены" << endl;
 		cout << endl << "Введите ID труб, данные о ремонте которых хотели бы изменить (для окончания ввода напишите -1):" << endl;
 		ch = proverkavvoda();
-		while (ch >= PipeMap.size()) {
-			cout << "Ошибка при вводе данных, введите другое значение" << endl;
+		while (PipeMap.count(ch) == 0 && ch != -1) {
+			cout << "Ошибка при вводе данных, данные о трубе с данным ID не найдены, введите другое значение" << endl;
 			ch = proverkavvoda();
+		}
+	}
+}
+
+void CompressorStation::FindandFixStation(map <int, CompressorStation>& CSMap) {//поиск и пакетное редактирование КС
+	cout << endl << "Поиск по какому параметру произвести?" << endl;
+	cout << "1 - Название";
+	cout << endl << "2 - Процент задейстованных цехов" << endl;
+	int ch;
+	ch = proverkavvoda();
+	switch(ch){
+		case 1: {//название
+			cout << endl << "Введите название КС:" << endl;
+			string str;
+			cin.ignore(32767, '\n');
+			getline(cin, str);
+			cout << endl << "Результат поиска: ";
+			for (auto& i : CSMap) {
+				if (i.second.name == str) {
+					cout << endl << "Компрессорная станция:" << endl;
+					cout << endl << "ID: " << i.first << endl;
+					cout << "Наименование: " << i.second.name << endl;
+					cout << "Количество цехов: " << i.second.kol << endl;
+					cout << "Количество цехов в работе: " << i.second.kolinwork << endl;
+					cout << "Эффективность: " << i.second.effectiveness << endl;
+				}
+			}
+			cout << endl << "Выберите действие (для выхода введите -1):";
+			cout << endl << "1 - Изменить данные всех найденных КС";
+			cout << endl << "2 - Выборочно изменить данные некоторых КС" << endl;
+			int ch1;
+			ch1 = proverkavvoda();
+			switch (ch1) {
+				case 1: {
+					string str1;
+					cout << "Введите новое название КС" << endl;
+					cin.ignore(32767, '\n');
+					getline(cin, str1);
+					for (auto& i : CSMap) {
+						if (i.second.name == str) {
+							i.second.name = str1;
+						}
+					}
+					cout << "Данные изменены";
+					break;
+				}
+				case 2: {
+					string str1;
+					cout << "Введите новое название КС" << endl;
+					cin.ignore(32767, '\n');
+					getline(cin, str1);
+					cout << endl << "Введите ID КС, название которой хотели бы изменить (для окончания ввода напишите -1):" << endl;
+					ch1 = proverkavvoda();
+					while (CSMap.count(ch1) == 0 && ch1 != -1) {
+						cout << "Ошибка при вводе данных, данные о КС с данным ID не найдены, введите другое значение" << endl;
+						ch1 = proverkavvoda();
+					}
+					while (ch1 != -1 && CSMap.count(ch1) != 0) {
+						CSMap[ch1].name = str1;
+						cout << endl << "Данные изменены" << endl;
+						cout << endl << "Введите ID КС, название которой хотели бы изменить (для окончания ввода напишите -1):" << endl;
+						ch1 = proverkavvoda();
+						while (CSMap.count(ch1) == 0 && ch1 != -1) {
+							cout << "Ошибка при вводе данных, данные о КС с данным ID не найдены, введите другое значение" << endl;
+							ch1 = proverkavvoda();
+						}
+					}
+					break;
+				}
+				default: {
+					cout << "Ошибка при вводе данных";
+					break;
+				}
+			}
+			break;
+		}
+		case 2: {//процент задейстованных цехов
+			cout << endl << "Введите минимальный процент задейстованных цехов: " << endl;
+			int percent;
+			cin >> percent;
+			cout << endl << "Результат поиска: ";
+			for (auto& i : CSMap) {
+				if ((double(i.second.kolinwork) / double(i.second.kol) * 100) >= percent) {
+					cout << endl << "Компрессорная станция:" << endl;
+					cout << endl << "ID: " << i.first << endl;
+					cout << "Наименование: " << i.second.name << endl;
+					cout << "Количество цехов: " << i.second.kol << endl;
+					cout << "Количество цехов в работе: " << i.second.kolinwork << endl;
+					cout << "Эффективность: " << i.second.effectiveness << endl;
+				}
+			}
+			cout << endl << "Выберите действие (для выхода введите -1):";
+			cout << endl << "1 - Изменить данные всех найденных КС";
+			cout << endl << "2 - Выборочно изменить данные некоторых КС" << endl;
+			int num;
+			num = proverkavvoda();
+			switch (num) {
+				case 1: {
+					cout << "Введите у скольких цехов возобновить работу:" << endl;
+					int kolvo;
+					kolvo = proverkavvoda();
+					for (auto& i : CSMap) {
+						if (((double(i.second.kolinwork) / double(i.second.kol) * 100) >= percent) && (i.second.kolinwork+kolvo <= i.second.kol)) {
+							i.second.kolinwork += kolvo;
+							cout << "Данные КС с ID " << i.first << " изменены" << endl;
+						}
+						else if (i.second.kolinwork + kolvo > i.second.kol) {
+							cout << "Ошибка при вводе числа, у КС с ID " << i.first << " значение не может быть изменено" << endl;
+						}
+					}
+					break;
+				}
+				case 2: {
+					cout << "Введите у скольких цехов возобновить работу:" << endl;
+					int kolvo;
+					kolvo = proverkavvoda();
+					int ch1;
+					cout << endl << "Введите ID КС, число рабочих цехов которой хотели бы изменить (для окончания ввода напишите -1):" << endl;
+					ch1 = proverkavvoda();
+					while (CSMap.count(ch1) == 0 && ch1 != -1) {
+						cout << "Ошибка при вводе данных, данные о КС с данным ID не найдены, введите другое значение" << endl;
+						ch1 = proverkavvoda();
+					}
+					while (ch1 != -1 && CSMap.count(ch1) != 0) {
+						if (CSMap[ch1].kolinwork + kolvo <= CSMap[ch1].kol) {
+							CSMap[ch1].kolinwork += kolvo;
+							cout << "Данные КС с ID " << ch1 << " изменены" << endl;
+							cout << endl << "Введите ID КС, число рабочих цехов которой хотели бы изменить (для окончания ввода напишите -1):" << endl;
+							ch1 = proverkavvoda();
+							while (CSMap.count(ch1) == 0 && ch1 != -1) {
+								cout << "Ошибка при вводе данных, данные о КС с данным ID не найдены, введите другое значение" << endl;
+								ch1 = proverkavvoda();
+							}
+						}
+						else if (CSMap[ch1].kolinwork + kolvo > CSMap[ch1].kol) {
+							cout << "Ошибка при вводе числа, у КС с ID " << ch1 << " значение не может быть изменено" << endl;
+						}
+					}
+					break;
+				}
+				default: {
+					cout << "Ошибка при вводе данных";
+					break;
+				}
+			}
+			break;
+		}
+		default: {
+			cout << "Ошибка при вводе данных";
+			break;
 		}
 	}
 }
@@ -227,10 +351,12 @@ void mainmenu() {
 	cout << "7 - Загрузить" << endl;
 	cout << "8 - Удалить данные о трубах" << endl;
 	cout << "9 - Удалить данные о КС" << endl;
+	cout << "10 - Найти трубы в ремонте и выполнить пакетное редактирование" << endl;
+	cout << "11 - Найти КС по названию, проценту задействованных цехов и выполнить пакетное редактирование" << endl;
 	cout << "0 - Выход" << endl << endl;
 }
 
-void savefilepipe(const map <int, Pipe>& PipeMap, ofstream& filesave) {
+void Pipe::savefilepipe(const map <int, Pipe>& PipeMap, ofstream& filesave) {
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {
 			filesave << "Труба:" << endl;
@@ -242,21 +368,9 @@ void savefilepipe(const map <int, Pipe>& PipeMap, ofstream& filesave) {
 	}
 	else
 		filesave << "Нет данных о трубах" << endl;
-	/*if (CSMap.size() != 0) {
-		for (auto& i : CSMap) {
-			filesave << "Компрессорная станция:" << endl;
-			filesave << i.first << endl;
-			filesave << i.second.name << endl;
-			filesave << i.second.kol << endl;
-			filesave << i.second.kolinwork << endl;
-			filesave << i.second.effectiveness << endl;
-		}
-	}
-	else
-		filesave << "Нет данных о КС" << endl;*/
 }
 
-void savefilestation(const map <int, CompressorStation>& CSMap, ofstream& filesave) {
+void CompressorStation::savefilestation(const map <int, CompressorStation>& CSMap, ofstream& filesave) {
 	if (CSMap.size() != 0) {
 		for (auto& i : CSMap) {
 			filesave << "Компрессорная станция:" << endl;
@@ -272,28 +386,28 @@ void savefilestation(const map <int, CompressorStation>& CSMap, ofstream& filesa
 }
 
 void loadfilepipe(Pipe& p, CompressorStation& cs, ifstream& fileload) {
-	string str;
-	getline(fileload, str);
-	if (str == "Труба:") {
-		getline(fileload, str);
-		p.d = stoi(str);
-		getline(fileload, str);
-		p.l = stoi(str);
-	}
-	getline(fileload, str);
-	if (str == "Компрессорная станция:") {
-		getline(fileload, str);
-		cs.name = str;
-		getline(fileload, str);
-		cs.kol = stoi(str);
-		getline(fileload, str);
-		cs.kolinwork = stoi(str);
-		getline(fileload, str);
-		cs.effectiveness = stoi(str);
-	}
+	//string str;
+	//getline(fileload, str);
+	//if (str == "Труба:") {
+	//	getline(fileload, str);
+	//	p.d = stoi(str);
+	//	getline(fileload, str);
+	//	p.l = stoi(str);
+	//}
+	//getline(fileload, str);
+	//if (str == "Компрессорная станция:") {
+	//	getline(fileload, str);
+	//	cs.name = str;
+	//	getline(fileload, str);
+	//	cs.kol = stoi(str);
+	//	getline(fileload, str);
+	//	cs.kolinwork = stoi(str);
+	//	getline(fileload, str);
+	//	cs.effectiveness = stoi(str);
+	//}
 }
 void proverkamenu(const int& menu) {
-	if ((menu > 9) || (menu < 0)) {
+	if ((menu > 11) || (menu < 0)) {
 		cout << "Введите другое число" << endl;
 	}
 }
@@ -331,7 +445,7 @@ int main()
 			case 4: {
 				cout << endl << "Введите ID трубы для редактирования: ";
 				i = proverkavvoda();
-				if (i < PipeMap.size()) {
+				if (PipeMap.count(i) != 0) {
 					p.FixPipe(PipeMap[i]);
 				}
 				else {
@@ -342,7 +456,7 @@ int main()
 			case 5: {
 				cout << endl << "Введите ID КС для редактирования: ";
 				j = proverkavvoda();
-				if (j < CSMap.size()) {
+				if (CSMap.count(j) != 0) {
 					cs.FixStation(CSMap[j]);
 				}
 				else {
@@ -355,8 +469,8 @@ int main()
 				string filenam;
 				cin >> filenam;
 				ofstream filesave(filenam + ".txt");
-				savefilepipe(PipeMap, filesave);
-				savefilestation(CSMap, filesave);
+				p.savefilepipe(PipeMap, filesave);
+				cs.savefilestation(CSMap, filesave);
 				filesave.close();
 				break;
 			}
@@ -366,7 +480,7 @@ int main()
 				cin >> filenam;
 				ifstream fileload(filenam + ".txt");
 				if (fileload.fail()) {
-					cout << "Файл  для считывания информации не был создан" << endl;
+					cout << "Файл для считывания информации не был создан" << endl;
 				}
 				else {
 					loadfilepipe(p, cs, fileload);
@@ -384,6 +498,10 @@ int main()
 			}
 			case 10: {
 				p.FindandFixPipe(PipeMap);
+				break;
+			}
+			case 11: {
+				cs.FindandFixStation(CSMap);
 				break;
 			}
 		}
