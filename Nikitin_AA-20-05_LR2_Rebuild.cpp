@@ -50,36 +50,64 @@ CompressorStation CompressorStation::AddStation() { //Добавление КС
 	cs.effectiveness = proverkavvoda();
 	return cs;
 }
-void Pipe::PrintPipe(const unordered_map <int, Pipe>& PipeMap) //Вывод данных о трубе
-{
+//void Pipe::PrintPipe(const unordered_map <int, Pipe>& PipeMap) //Вывод данных о трубе
+//{
+//	if (PipeMap.size() != 0) {
+//		for (auto& i : PipeMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
+//			cout << endl << "Труба: " << endl;
+//			cout << endl << "ID: " << i.first;
+//			cout << endl << "Длина трубы: " << i.second.l;
+//			cout << endl << "Диаметр трубы: " << i.second.d;
+//			cout << endl << "Труба в ремонте:(0 - Нет, 1 - Да): " << i.second.repair << endl;
+//		}
+//	}
+//	else
+//		cout << endl <<"Труба не была добавлена" << endl;
+//}
+ostream& operator<< (ostream& out, const unordered_map <int, Pipe>& PipeMap) {
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
-			cout << endl << "Труба: " << endl;
-			cout << endl << "ID: " << i.first;
-			cout << endl << "Длина трубы: " << i.second.l;
-			cout << endl << "Диаметр трубы: " << i.second.d;
-			cout << endl << "Труба в ремонте:(0 - Нет, 1 - Да): " << i.second.repair << endl;
+			out << endl << "Труба: " << endl;
+			out << endl << "ID: " << i.first;
+			out << endl << "Длина трубы: " << i.second.l;
+			out << endl << "Диаметр трубы: " << i.second.d;
+			out << endl << "Труба в ремонте:(0 - Нет, 1 - Да): " << i.second.repair << endl;
 		}
 	}
 	else
-		cout << endl <<"Труба не была добавлена" << endl;
+		out << endl << "Труба не была добавлена" << endl;
+	return out;
 }
-
-void CompressorStation::PrintCompressorstation(const unordered_map <int, CompressorStation>& CSMap) //Вывод данных о КС
-{
+ostream& operator<< (ostream& out, const unordered_map <int, CompressorStation>& CSMap) {
 	if (CSMap.size() != 0) {
 		for (auto& i : CSMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
-				cout << endl << "Компрессорная станция:" << endl;
-				cout << endl << "ID: " << i.first << endl;
-				cout << "Наименование: " << i.second.name << endl;
-				cout << "Количество цехов: " << i.second.kol << endl;
-				cout << "Количество цехов в работе: " << i.second.kolinwork << endl;
-				cout << "Эффективность: " << i.second.effectiveness << endl;
-			}
+		out << endl << "Компрессорная станция:" << endl;
+		out << endl << "ID: " << i.first << endl;
+		out << "Наименование: " << i.second.name << endl;
+		out << "Количество цехов: " << i.second.kol << endl;
+		out << "Количество цехов в работе: " << i.second.kolinwork << endl;
+		out << "Эффективность: " << i.second.effectiveness << endl;
+		}
 	}
 	else
-		cout << endl << "КС не была добавлена" << endl;
+		out << endl << "КС не была добавлена" << endl;
+	return out;
 }
+//void CompressorStation::PrintCompressorstation(const unordered_map <int, CompressorStation>& CSMap) //Вывод данных о КС
+//{
+//	if (CSMap.size() != 0) {
+//		for (auto& i : CSMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
+//				cout << endl << "Компрессорная станция:" << endl;
+//				cout << endl << "ID: " << i.first << endl;
+//				cout << "Наименование: " << i.second.name << endl;
+//				cout << "Количество цехов: " << i.second.kol << endl;
+//				cout << "Количество цехов в работе: " << i.second.kolinwork << endl;
+//				cout << "Эффективность: " << i.second.effectiveness << endl;
+//			}
+//	}
+//	else
+//		cout << endl << "КС не была добавлена" << endl;
+//}
 
 void Pipe::FixPipe(Pipe& p) { //Редактирование данных трубы
 	p.repair = !p.repair;
@@ -463,6 +491,7 @@ void proverkamenu(const int& menu) {
 	}
 }
 
+
 int main()
 {
 	setlocale(LC_ALL, "Russian");
@@ -489,8 +518,8 @@ int main()
 				break;
 			}
 			case 3: {
-				p.PrintPipe(PipeMap);
-				cs.PrintCompressorstation(CSMap);
+				cout << PipeMap;
+				cout << CSMap;
 				break;
 			}
 			case 4: {

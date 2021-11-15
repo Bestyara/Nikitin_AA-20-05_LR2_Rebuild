@@ -9,7 +9,8 @@ public:
 	int kolinwork;
 	int effectiveness;
 	CompressorStation AddStation();
-	void PrintCompressorstation(const unordered_map <int, CompressorStation>&);
+	//void PrintCompressorstation(const unordered_map <int, CompressorStation>&);
+	friend ostream& operator<< (ostream&, const unordered_map <int, CompressorStation>&);
 	void FixStation(CompressorStation&);
 	void DelStation(unordered_map <int, CompressorStation>&);
 	void FindandFixStation(unordered_map <int, CompressorStation>&);

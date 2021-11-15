@@ -7,7 +7,8 @@ public:
 	int l;
 	bool repair;
 	Pipe AddPipe();
-	void PrintPipe(const unordered_map <int, Pipe>&);
+	//void PrintPipe(const unordered_map <int, Pipe>&);
+	friend ostream& operator<< (ostream&, const unordered_map <int, Pipe>&);
 	void FixPipe(Pipe&);
 	void DelPipe(unordered_map <int, Pipe>&);
 	void FindandFixPipe(unordered_map<int, Pipe>&);
