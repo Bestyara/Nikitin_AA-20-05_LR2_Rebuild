@@ -6,6 +6,7 @@ using namespace std;
 #include <fstream>
 #include <map>
 #include <vector>
+#include <unordered_map>
 #include "cs.h"
 #include "pipe.h"
 
@@ -49,11 +50,11 @@ CompressorStation CompressorStation::AddStation() { //Добавление КС
 	cs.effectiveness = proverkavvoda();
 	return cs;
 }
-void Pipe::PrintPipe(const map <int, Pipe>& PipeMap) //Вывод данных о трубе
+void Pipe::PrintPipe(const unordered_map <int, Pipe>& PipeMap) //Вывод данных о трубе
 {
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
-			cout << endl << "Труба";
+			cout << endl << "Труба: " << endl;
 			cout << endl << "ID: " << i.first;
 			cout << endl << "Длина трубы: " << i.second.l;
 			cout << endl << "Диаметр трубы: " << i.second.d;
@@ -64,7 +65,7 @@ void Pipe::PrintPipe(const map <int, Pipe>& PipeMap) //Вывод данных �
 		cout << endl <<"Труба не была добавлена" << endl;
 }
 
-void CompressorStation::PrintCompressorstation(const map <int, CompressorStation>& CSMap) //Вывод данных о КС
+void CompressorStation::PrintCompressorstation(const unordered_map <int, CompressorStation>& CSMap) //Вывод данных о КС
 {
 	if (CSMap.size() != 0) {
 		for (auto& i : CSMap) {// https://stackoverflow.com/questions/14555751/how-to-iterate-over-a-c-stl-map-data-structure-using-the-auto-keyword
@@ -124,7 +125,7 @@ void CompressorStation::FixStation(CompressorStation& cs) { //Редактиро
 	}
 }
 
-void Pipe::DelPipe(map <int, Pipe>& PipeMap) {
+void Pipe::DelPipe(unordered_map <int, Pipe>& PipeMap) {
 	cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
 	int ch = proverkavvoda();
 	if (PipeMap.count(ch) != 0) {
@@ -139,7 +140,7 @@ void Pipe::DelPipe(map <int, Pipe>& PipeMap) {
 	}
 }
 
-void CompressorStation::DelStation(map <int, CompressorStation>& CSMap) {
+void CompressorStation::DelStation(unordered_map <int, CompressorStation>& CSMap) {
 	cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
 	int ch = proverkavvoda();
 	if (CSMap.count(ch) != 0) {
@@ -154,7 +155,7 @@ void CompressorStation::DelStation(map <int, CompressorStation>& CSMap) {
 	}
 }
 
-void Pipe::FindandFixPipe(map <int, Pipe>& PipeMap) {//поиск и пакетное редактирование труб
+void Pipe::FindandFixPipe(unordered_map <int, Pipe>& PipeMap) {//поиск и пакетное редактирование труб
 	cout << endl << "Данные о трубах, которые находятся в ремонте: " << endl;
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {
@@ -191,7 +192,7 @@ void Pipe::FindandFixPipe(map <int, Pipe>& PipeMap) {//поиск и пакет�
 	}
 }
 
-void CompressorStation::FindandFixStation(map <int, CompressorStation>& CSMap) {//поиск и пакетное редактирование КС
+void CompressorStation::FindandFixStation(unordered_map <int, CompressorStation>& CSMap) {//поиск и пакетное редактирование КС
 	cout << endl << "Поиск по какому параметру произвести?" << endl;
 	cout << "1 - Название";
 	cout << endl << "2 - Процент задейстованных цехов" << endl;
@@ -230,7 +231,7 @@ void CompressorStation::FindandFixStation(map <int, CompressorStation>& CSMap) {
 							i.second.name = str1;
 						}
 					}
-					cout << "Данные изменены";
+					cout << "Данные изменены" << endl;
 					break;
 				}
 				case 2: {
@@ -356,7 +357,7 @@ void mainmenu() {
 	cout << "0 - Выход" << endl << endl;
 }
 
-void Pipe::savefilepipe(const map <int, Pipe>& PipeMap, ofstream& filesave) {
+void Pipe::savefilepipe(const unordered_map <int, Pipe>& PipeMap, ofstream& filesave) {
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {
 			filesave << "Труба:" << endl;
@@ -370,7 +371,7 @@ void Pipe::savefilepipe(const map <int, Pipe>& PipeMap, ofstream& filesave) {
 		filesave << "Нет данных о трубах" << endl;
 }
 
-void CompressorStation::savefilestation(const map <int, CompressorStation>& CSMap, ofstream& filesave) {
+void CompressorStation::savefilestation(const unordered_map <int, CompressorStation>& CSMap, ofstream& filesave) {
 	if (CSMap.size() != 0) {
 		for (auto& i : CSMap) {
 			filesave << "Компрессорная станция:" << endl;
@@ -385,26 +386,76 @@ void CompressorStation::savefilestation(const map <int, CompressorStation>& CSMa
 		filesave << "Нет данных о КС" << endl;
 }
 
-void loadfilepipe(Pipe& p, CompressorStation& cs, ifstream& fileload) {
-	//string str;
-	//getline(fileload, str);
-	//if (str == "Труба:") {
-	//	getline(fileload, str);
-	//	p.d = stoi(str);
-	//	getline(fileload, str);
-	//	p.l = stoi(str);
-	//}
-	//getline(fileload, str);
-	//if (str == "Компрессорная станция:") {
-	//	getline(fileload, str);
-	//	cs.name = str;
-	//	getline(fileload, str);
-	//	cs.kol = stoi(str);
-	//	getline(fileload, str);
-	//	cs.kolinwork = stoi(str);
-	//	getline(fileload, str);
-	//	cs.effectiveness = stoi(str);
-	//}
+void Pipe::loadfilepipe(unordered_map <int, Pipe>& PipeMap, ifstream& fileload) {
+	string str;
+	Pipe p;
+	while (!fileload.eof()) {
+		getline(fileload, str);
+		if (str == "Pipe") {
+			int strid;
+			getline(fileload, str);//считываем id
+			strid = stoi(str);
+			if (PipeMap.count(strid) != 0) {
+				getline(fileload, str);//считываем диаметр
+				PipeMap[strid].d = stoi(str);
+				getline(fileload, str);//считываем длину
+				PipeMap[strid].l = stoi(str);
+			}
+			else {
+				getline(fileload, str);//считываем диаметр
+				p.d = stoi(str);
+				getline(fileload, str);//считываем длину
+				p.l = stoi(str);
+				PipeMap.insert(pair <int, Pipe>(strid, p));
+			}
+		}
+		else if (str == "Compressor Station") {
+			getline(fileload, str);
+			getline(fileload, str);
+			getline(fileload, str);
+			getline(fileload, str);
+			getline(fileload, str);
+		}
+	}
+}
+
+void CompressorStation::loadfilestation(unordered_map <int, CompressorStation>& CSMap, ifstream& fileload) {
+	string str;
+	CompressorStation cs;
+	while (!fileload.eof()) {
+		getline(fileload, str);
+		if (str == "Pipe") {
+			getline(fileload, str);
+			getline(fileload, str);
+			getline(fileload, str);
+		}
+		else if (str == "Compressor Station") {
+			int strid;
+			getline(fileload, str);//считываем id
+			strid = stoi(str);
+			if (CSMap.count(strid) != 0) {
+				getline(fileload, str);//считываем название
+				CSMap[strid].name = str;
+				getline(fileload, str);//считываем кол-во цехов
+				CSMap[strid].kol = stoi(str);
+				getline(fileload, str);//считываем кол-во рабочих цехов
+				CSMap[strid].kolinwork = stoi(str);
+				getline(fileload, str);//считываем эффективность
+				CSMap[strid].effectiveness = stoi(str);
+			}
+			else {
+				getline(fileload, str);//считываем название
+				cs.name = str;
+				getline(fileload, str);//считываем кол-во цехов
+				cs.kol = stoi(str);
+				getline(fileload, str);//считываем кол-во рабочих цехов
+				cs.kolinwork = stoi(str);
+				getline(fileload, str);//считываем эффективность
+				cs.effectiveness = stoi(str);
+				CSMap.insert(pair <int, CompressorStation>(strid, cs));
+			}
+		}
+	}
 }
 void proverkamenu(const int& menu) {
 	if ((menu > 11) || (menu < 0)) {
@@ -418,8 +469,8 @@ int main()
 	int menu = 1;
 	int pipeid = 0, stationid = 0;
 	int i = 0, j = 0;
-	map<int, Pipe> PipeMap;
-	map<int, CompressorStation> CSMap;
+	unordered_map <int, Pipe> PipeMap;
+	unordered_map <int, CompressorStation> CSMap;
 	Pipe p;
 	CompressorStation cs;
 	while (menu != 0) {
@@ -483,7 +534,10 @@ int main()
 					cout << "Файл для считывания информации не был создан" << endl;
 				}
 				else {
-					loadfilepipe(p, cs, fileload);
+					p.loadfilepipe(PipeMap, fileload);
+					fileload.close(); 
+					ifstream fileload(filenam + ".txt");
+					cs.loadfilestation(CSMap, fileload);
 					fileload.close();
 				}
 				break;

@@ -9,9 +9,10 @@ public:
 	int kolinwork;
 	int effectiveness;
 	CompressorStation AddStation();
-	void PrintCompressorstation(const map <int, CompressorStation>&);
+	void PrintCompressorstation(const unordered_map <int, CompressorStation>&);
 	void FixStation(CompressorStation&);
-	void DelStation(map <int, CompressorStation>&);
-	void FindandFixStation(map <int, CompressorStation>&);
-	void savefilestation(const map <int, CompressorStation>&, ofstream&);
+	void DelStation(unordered_map <int, CompressorStation>&);
+	void FindandFixStation(unordered_map <int, CompressorStation>&);
+	void savefilestation(const unordered_map <int, CompressorStation>&, ofstream&);
+	void loadfilestation(unordered_map <int, CompressorStation>&, ifstream&);
 };

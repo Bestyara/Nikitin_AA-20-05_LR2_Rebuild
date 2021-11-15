@@ -2,14 +2,15 @@
 class Pipe { //Структура трубы
 private:
 	static int id;
+public:
 	int d;
 	int l;
 	bool repair;
-public:
 	Pipe AddPipe();
-	void PrintPipe(const map <int, Pipe>&);
+	void PrintPipe(const unordered_map <int, Pipe>&);
 	void FixPipe(Pipe&);
-	void DelPipe(map <int, Pipe>&);
-	void FindandFixPipe(map <int, Pipe>&);
-	void savefilepipe(const map <int, Pipe>&, ofstream&);
+	void DelPipe(unordered_map <int, Pipe>&);
+	void FindandFixPipe(unordered_map<int, Pipe>&);
+	void savefilepipe(const unordered_map <int, Pipe>&, ofstream&);
+	void loadfilepipe(unordered_map <int, Pipe>&, ifstream&);
 };
