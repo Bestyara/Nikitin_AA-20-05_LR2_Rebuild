@@ -139,7 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cscfile.cpp" />
     <ClCompile Include="Nikitin_AA-20-05_LR2_Rebuild.cpp" />
+    <ClCompile Include="Pipecfile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

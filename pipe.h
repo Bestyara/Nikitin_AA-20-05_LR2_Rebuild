@@ -1,11 +1,14 @@
+#pragma once
+
 #include <map>
+
 class Pipe { //Структура трубы
-private:
-	static int id;
 public:
+	static int id;
 	int d;
 	int l;
 	bool repair;
+	Pipe();
 	Pipe AddPipe();
 	//void PrintPipe(const unordered_map <int, Pipe>&);
 	friend ostream& operator<< (ostream&, const unordered_map <int, Pipe>&);
