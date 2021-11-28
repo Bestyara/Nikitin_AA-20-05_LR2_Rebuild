@@ -17,14 +17,13 @@ Pipe::Pipe()
 	this->repair = 0;
 }
 
-Pipe Pipe::AddPipe() { //Добавление трубы
-	Pipe p; // { 0, 1420, 200, };
+istream& operator>> (istream& in, Pipe& p){
 	cout << "Введите диаметр трубы: ";
 	p.d = proverkavvoda(p.d);
 	cout << "Введите длину трубы: ";
 	p.l = proverkavvoda(p.l);
 	p.repair = 0;
-	return p;
+	return in;
 }
 
 ostream& operator<< (ostream& out, const unordered_map <int, Pipe>& PipeMap) {
@@ -42,17 +41,17 @@ ostream& operator<< (ostream& out, const unordered_map <int, Pipe>& PipeMap) {
 	return out;
 }
 
-void Pipe::FixPipe(Pipe& p) { //Редактирование данных трубы
-	p.repair = !p.repair;
-	if (p.repair == 0) {
+void FixPipe(unordered_map <int, Pipe>& PipeMap, int& ind) { //Редактирование данных трубы
+	PipeMap[ind].repair = !PipeMap[ind].repair;
+	if (PipeMap[ind].repair == 0) {
 		cout << "Теперь труба не в ремонте" << endl;
 	}
-	if (p.repair == 1) {
+	if (PipeMap[ind].repair == 1) {
 		cout << "Теперь труба в ремонте" << endl;
 	}
 }
 
-void Pipe::DelPipe(unordered_map <int, Pipe>& PipeMap) {
+void DelPipe(unordered_map <int, Pipe>& PipeMap) {
 	cout << endl << "Введите ID трубы, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
 	int ch = -2;
 	ch = proverkavvoda(ch);
@@ -68,7 +67,7 @@ void Pipe::DelPipe(unordered_map <int, Pipe>& PipeMap) {
 	}
 }
 
-void Pipe::FindandFixPipe(unordered_map <int, Pipe>& PipeMap) {//поиск и пакетное редактирование труб
+void FindandFixPipe(unordered_map <int, Pipe>& PipeMap) {//поиск и пакетное редактирование труб
 	cout << endl << "Данные о трубах, которые находятся в ремонте: " << endl;
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {
@@ -105,7 +104,7 @@ void Pipe::FindandFixPipe(unordered_map <int, Pipe>& PipeMap) {//поиск и пакетно
 	}
 }
 
-void Pipe::savefilepipe(const unordered_map <int, Pipe>& PipeMap, ofstream& filesave) {
+void savefilepipe(const unordered_map <int, Pipe>& PipeMap, ofstream& filesave) {
 	if (PipeMap.size() != 0) {
 		for (auto& i : PipeMap) {
 			filesave << "Труба:" << endl;
@@ -119,7 +118,7 @@ void Pipe::savefilepipe(const unordered_map <int, Pipe>& PipeMap, ofstream& file
 		filesave << "Нет данных о трубах" << endl;
 }
 
-void Pipe::loadfilepipe(unordered_map <int, Pipe>& PipeMap, ifstream& fileload) {
+void loadfilepipe(unordered_map <int, Pipe>& PipeMap, ifstream& fileload) {
 	string str;
 	Pipe p;
 	while (!fileload.eof()) {

@@ -17,11 +17,11 @@ CompressorStation::CompressorStation()
 	this->kolinwork = 0;
 	this->effectiveness = 0;
 }
-CompressorStation CompressorStation::AddStation() { //Добавление КС
-	CompressorStation cs;
+
+istream& operator>> (istream& in, CompressorStation& cs) {
 	cout << "Введите наименование: ";
-	cin.ignore(32767, '\n');//https://ravesli.com/urok-57-vvedenie-v-std-string/
-	getline(cin, cs.name);
+	in.ignore(32767, '\n');//https://ravesli.com/urok-57-vvedenie-v-std-string/
+	getline(in, cs.name);
 	cout << "Количество цехов: ";
 	cs.kol = proverkavvoda(cs.kol);
 	cout << "Количество цехов в работе: ";
@@ -32,7 +32,7 @@ CompressorStation CompressorStation::AddStation() { //Добавление КС
 	}
 	cout << "Эффективность: ";
 	cs.effectiveness = proverkavvoda(cs.effectiveness);
-	return cs;
+	return in;
 }
 ostream& operator<< (ostream& out, const unordered_map <int, CompressorStation>& CSMap) {
 	if (CSMap.size() != 0) {
@@ -49,7 +49,7 @@ ostream& operator<< (ostream& out, const unordered_map <int, CompressorStation>&
 		out << endl << "КС не была добавлена" << endl;
 	return out;
 }
-void CompressorStation::FixStation() { //Редактирование данных о КС
+void FixStation(unordered_map <int, CompressorStation>& CSMap,int& j) { //Редактирование данных о КС
 	cout << "Введите что нужно сделать (возобновить работу цехов, остановить работу цехов)" << endl;
 	cout << "1 - Возобновить работу цехов " << endl;
 	cout << "2 - Остановить работу цехов " << endl << endl;
@@ -58,24 +58,24 @@ void CompressorStation::FixStation() { //Редактирование данных о КС
 	switch (kol) {
 	case 1: {
 		cout << "У скольких цехов нужно возобновить работу: ";
-		int kolvo = 0;
+		int kolvo = -2;
 		kolvo = proverkavvoda(kolvo);
-		while (kolinwork + kolvo > kol) {
+		while (CSMap[j].kolinwork + kolvo > kol) {
 			cout << "Ошибка ввода, введите другое значение" << endl;
 			kolvo = proverkavvoda(kolvo);
 		}
-		kolinwork += kolvo;
+		CSMap[j].kolinwork += kolvo;
 		break;
 	}
 	case 2: {
 		cout << "У скольких цехов нужно остановить работу: ";
 		int kolvo = 0;
 		kolvo = proverkavvoda(kolvo);
-		while (kolinwork - kolvo < 0) {
+		while (CSMap[j].kolinwork - kolvo < 0) {
 			cout << "Ошибка ввода, введите другое значение" << endl;
 			kolvo = proverkavvoda(kolvo);
 		}
-		kolinwork -= kolvo;
+		CSMap[j].kolinwork -= kolvo;
 		break;
 	}
 	default:
@@ -84,7 +84,7 @@ void CompressorStation::FixStation() { //Редактирование данных о КС
 	}
 }
 
-void CompressorStation::DelStation(unordered_map <int, CompressorStation>& CSMap) {
+void DelStation(unordered_map <int, CompressorStation>& CSMap) {
 	cout << endl << "Введите ID КС, данные о которой нужно удалить (для окончания ввода напишите -1)" << endl;
 	int ch = -2;
 	ch = proverkavvoda(ch);
@@ -100,7 +100,7 @@ void CompressorStation::DelStation(unordered_map <int, CompressorStation>& CSMap
 	}
 }
 
-void CompressorStation::FindandFixStation(unordered_map <int, CompressorStation>& CSMap) {//поиск и пакетное редактирование КС
+void FindandFixStation(unordered_map <int, CompressorStation>& CSMap) {//поиск и пакетное редактирование КС
 	cout << endl << "Поиск по какому параметру произвести?" << endl;
 	cout << "1 - Название";
 	cout << endl << "2 - Процент задейстованных цехов" << endl;
@@ -212,8 +212,8 @@ void CompressorStation::FindandFixStation(unordered_map <int, CompressorStation>
 			cout << "Введите у скольких цехов возобновить работу:" << endl;
 			int kolvo = -2;
 			kolvo = proverkavvoda(kolvo);
-			int ch1 = -2;
 			cout << endl << "Введите ID КС, число рабочих цехов которой хотели бы изменить (для окончания ввода напишите -1):" << endl;
+			int ch1 = -2;
 			ch1 = proverkavvoda(ch1);
 			while (CSMap.count(ch1) == 0 && ch1 != -1) {
 				cout << "Ошибка при вводе данных, данные о КС с данным ID не найдены, введите другое значение" << endl;
@@ -250,7 +250,7 @@ void CompressorStation::FindandFixStation(unordered_map <int, CompressorStation>
 	}
 }
 
-void CompressorStation::savefilestation(const unordered_map <int, CompressorStation>& CSMap, ofstream& filesave) {
+void savefilestation(const unordered_map <int, CompressorStation>& CSMap, ofstream& filesave) {
 	if (CSMap.size() != 0) {
 		for (auto& i : CSMap) {
 			filesave << "Компрессорная станция:" << endl;
@@ -265,7 +265,7 @@ void CompressorStation::savefilestation(const unordered_map <int, CompressorStat
 		filesave << "Нет данных о КС" << endl;
 }
 
-void CompressorStation::loadfilestation(unordered_map <int, CompressorStation>& CSMap, ifstream& fileload) {
+void loadfilestation(unordered_map <int, CompressorStation>& CSMap, ifstream& fileload) {
 	string str;
 	CompressorStation cs;
 	while (!fileload.eof()) {

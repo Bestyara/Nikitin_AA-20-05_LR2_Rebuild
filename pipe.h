@@ -1,18 +1,17 @@
-#pragma once
-
 #include <map>
 
-class Pipe { //—труктура трубы
+using namespace std;
+
+class Pipe { //класс трубы
 public:
 	static int id;
 	int d;
 	int l;
 	bool repair;
-	Pipe();
-	Pipe AddPipe();
-	//void PrintPipe(const unordered_map <int, Pipe>&);
-	friend ostream& operator<< (ostream&, const unordered_map <int, Pipe>&);
-	void FixPipe(Pipe&);
+	Pipe();//конструктор
+	friend istream& operator>> (istream&, Pipe& p);//перегрузка ввода
+	friend ostream& operator<< (ostream&, const unordered_map <int, Pipe>&);//перегрузка вывода
+	void FixPipe(unordered_map <int, Pipe>&, int&);
 	void DelPipe(unordered_map <int, Pipe>&);
 	void FindandFixPipe(unordered_map<int, Pipe>&);
 	void savefilepipe(const unordered_map <int, Pipe>&, ofstream&);

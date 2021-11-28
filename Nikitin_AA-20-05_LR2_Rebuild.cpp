@@ -35,6 +35,30 @@ double proverkavvoda(double a) {// перегрузка функций
 	}
 }
 
+int Pipe::id = 0;
+
+void FixPipe(unordered_map <int, Pipe>&,int&);
+
+void DelPipe(unordered_map <int, Pipe>& PipeMap);
+
+void FindandFixPipe(unordered_map <int, Pipe>& PipeMap);
+
+void savefilepipe(const unordered_map <int, Pipe>& PipeMap, ofstream& filesave);
+
+void loadfilepipe(unordered_map <int, Pipe>& PipeMap, ifstream& fileload);
+
+int CompressorStation::id = 0;
+
+void FixStation(unordered_map <int, CompressorStation>& CSMap, int& j);
+
+void DelStation(unordered_map <int, CompressorStation>& CSMap);
+
+void FindandFixStation(unordered_map <int, CompressorStation>& CSMap);
+
+void savefilestation(const unordered_map <int, CompressorStation>& CSMap, ofstream& filesave);
+
+void loadfilestation(unordered_map <int, CompressorStation>& CSMap, ifstream& fileload);
+
 //Pipe Pipe::AddPipe(){ //Добавление трубы
 //	Pipe p; // { 0, 1420, 200, };
 //	cout << "Введите диаметр трубы: ";
@@ -487,25 +511,25 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int menu = 1;
-	int pipeid = 0, stationid = 0;
-	int i = 0, j = 0;
 	unordered_map <int, Pipe> PipeMap;
 	unordered_map <int, CompressorStation> CSMap;
-	Pipe p;
-	CompressorStation cs;
 	while (menu != 0) {
 		mainmenu();
 		menu = proverkavvoda(menu);
 		proverkamenu(menu);
 		switch (menu) {
 			case 1: {
-				PipeMap.insert(pair <int, Pipe>(pipeid, p.AddPipe()));
-				pipeid++;
+				Pipe p;
+				cin >> p;
+				PipeMap.insert(pair <int, Pipe>(Pipe::id,p));
+				Pipe::id++;
 				break;
 			}
 			case 2: {
-				CSMap.insert(pair <int, CompressorStation>(stationid, cs.AddStation()));
-				stationid++;
+				CompressorStation cs;
+				cin >> cs;
+				CSMap.insert(pair <int, CompressorStation>(CompressorStation::id, cs));
+				CompressorStation::id++;
 				break;
 			}
 			case 3: {
@@ -514,10 +538,11 @@ int main()
 				break;
 			}
 			case 4: {
+				int i = -2;
 				cout << endl << "Введите ID трубы для редактирования: ";
 				i = proverkavvoda(i);
 				if (PipeMap.count(i) != 0) {
-					p.FixPipe(PipeMap[i]);
+					FixPipe(PipeMap,i);
 				}
 				else {
 					cout << "Введите другое значение" << endl;
@@ -525,10 +550,11 @@ int main()
 				break;
 			}
 			case 5: {
+				int j = -2;
 				cout << endl << "Введите ID КС для редактирования: ";
-				j = proverkavvoda(i);
+				j = proverkavvoda(j);
 				if (CSMap.count(j) != 0) {
-					CSMap[j].FixStation();
+					FixStation(CSMap,j);
 				}
 				else {
 					cout << "Введите другое значение" << endl;
@@ -540,8 +566,8 @@ int main()
 				string filenam;
 				cin >> filenam;
 				ofstream filesave(filenam + ".txt");
-				p.savefilepipe(PipeMap, filesave);
-				cs.savefilestation(CSMap, filesave);
+				savefilepipe(PipeMap, filesave);
+				savefilestation(CSMap, filesave);
 				filesave.close();
 				break;
 			}
@@ -554,28 +580,28 @@ int main()
 					cout << "Файл для считывания информации не был создан" << endl;
 				}
 				else {
-					p.loadfilepipe(PipeMap, fileload);
+					loadfilepipe(PipeMap, fileload);
 					fileload.close(); 
 					ifstream fileload(filenam + ".txt");
-					cs.loadfilestation(CSMap, fileload);
+					loadfilestation(CSMap, fileload);
 					fileload.close();
 				}
 				break;
 			}
 			case 8: {
-				p.DelPipe(PipeMap);
+				DelPipe(PipeMap);
 				break;
 			}
 			case 9: {
-				cs.DelStation(CSMap);
+				DelStation(CSMap);
 				break;
 			}
 			case 10: {
-				p.FindandFixPipe(PipeMap);
+				FindandFixPipe(PipeMap);
 				break;
 			}
 			case 11: {
-				cs.FindandFixStation(CSMap);
+				FindandFixStation(CSMap);
 				break;
 			}
 		}
