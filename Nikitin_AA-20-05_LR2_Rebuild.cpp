@@ -49,7 +49,7 @@ void loadfilepipe(unordered_map <int, Pipe>& PipeMap, ifstream& fileload);
 
 int CompressorStation::id = 0;
 
-void FixStation(unordered_map <int, CompressorStation>& CSMap, int& j);
+void FixStation(unordered_map <int, CompressorStation>& CSMap, int&);
 
 void DelStation(unordered_map <int, CompressorStation>& CSMap);
 
@@ -609,3 +609,4 @@ int main()
 		system("cls");
 	}
 }
+

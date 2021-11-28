@@ -60,7 +60,7 @@ void FixStation(unordered_map <int, CompressorStation>& CSMap,int& j) { //Редакт
 		cout << "У скольких цехов нужно возобновить работу: ";
 		int kolvo = -2;
 		kolvo = proverkavvoda(kolvo);
-		while (CSMap[j].kolinwork + kolvo > kol) {
+		while (CSMap[j].kolinwork + kolvo > CSMap[j].kol) {
 			cout << "Ошибка ввода, введите другое значение" << endl;
 			kolvo = proverkavvoda(kolvo);
 		}
