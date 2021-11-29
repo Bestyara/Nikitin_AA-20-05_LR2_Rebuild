@@ -49,7 +49,7 @@ ostream& operator<< (ostream& out, const unordered_map <int, CompressorStation>&
 		out << endl << "КС не была добавлена" << endl;
 	return out;
 }
-void FixStation(unordered_map <int, CompressorStation>& CSMap,int& j) { //Редактирование данных о КС
+void CompressorStation::FixStation(unordered_map <int, CompressorStation>& CSMap,int& j) { //Редактирование данных о КС
 	cout << "Введите что нужно сделать (возобновить работу цехов, остановить работу цехов)" << endl;
 	cout << "1 - Возобновить работу цехов " << endl;
 	cout << "2 - Остановить работу цехов " << endl << endl;

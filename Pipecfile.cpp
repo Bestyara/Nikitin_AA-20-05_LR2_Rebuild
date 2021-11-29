@@ -41,7 +41,7 @@ ostream& operator<< (ostream& out, const unordered_map <int, Pipe>& PipeMap) {
 	return out;
 }
 
-void FixPipe(unordered_map <int, Pipe>& PipeMap, int& ind) { //Редактирование данных трубы
+void Pipe::FixPipe(unordered_map <int, Pipe>& PipeMap, int& ind) { //Редактирование данных трубы
 	PipeMap[ind].repair = !PipeMap[ind].repair;
 	if (PipeMap[ind].repair == 0) {
 		cout << "Теперь труба не в ремонте" << endl;
