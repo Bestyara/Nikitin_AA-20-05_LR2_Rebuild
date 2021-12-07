@@ -15,9 +15,10 @@ public:
 	CompressorStation();//конструктор
 	friend istream& operator>> (istream&, CompressorStation& cs);//перегрузка ввода
 	friend ostream& operator<< (ostream&, const unordered_map <int, CompressorStation>&);//перегрузка вывода
-	void FixStation(unordered_map <int, CompressorStation>&, int&);
-	void DelStation(unordered_map <int, CompressorStation>&);
-	void FindandFixStation(unordered_map <int, CompressorStation>&);
-	void savefilestation(const unordered_map <int, CompressorStation>&, ofstream&);
-	void loadfilestation(unordered_map <int, CompressorStation>&, ifstream&);
+	void FixStation();
+	//void DelStation(unordered_map <int, CompressorStation>&);
+	//void FindandFixStation(unordered_map <int, CompressorStation>&);
+	//void savefilestation(ofstream&);
+	//void loadfilestation(ifstream&);
+	static int getid();
 };

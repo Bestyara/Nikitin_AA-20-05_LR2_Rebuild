@@ -140,8 +140,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cscfile.cpp" />
+    <ClCompile Include="Network.cpp" />
     <ClCompile Include="Nikitin_AA-20-05_LR2_Rebuild.cpp" />
     <ClCompile Include="Pipecfile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cs.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="pipe.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

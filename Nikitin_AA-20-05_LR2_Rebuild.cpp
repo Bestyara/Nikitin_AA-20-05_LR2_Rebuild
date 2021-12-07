@@ -1,15 +1,17 @@
 ﻿// try catch мусор в редактировании, проверить добавлена труба или нет
-using namespace std;
 #include <iostream>
 #include <string>
 #include "windows.h"
 #include <fstream>
-#include <vector>
 #include <unordered_map>
 #include "cs.h"
 #include "pipe.h"
+#include "Network.h"
 
-int proverkavvoda(int a) {
+using namespace std;
+
+int proverkavvodaint() {
+	int a;
 	while (true) {
 		cin >> a;
 		if (cin.fail() || a < -1) {
@@ -22,7 +24,8 @@ int proverkavvoda(int a) {
 	}
 }
 
-double proverkavvoda(double a) {// перегрузка функций
+double proverkavvodadouble() {// перегрузка функций
+	double a;
 	while (true) {
 		cin >> a;
 		if (cin.fail() || a < -1) {
@@ -39,22 +42,6 @@ int Pipe::id = 0;
 
 int CompressorStation::id = 0;
 
-void DelPipe(unordered_map <int, Pipe>& PipeMap);
-
-void FindandFixPipe(unordered_map <int, Pipe>& PipeMap);
-
-void savefilepipe(const unordered_map <int, Pipe>& PipeMap, ofstream& filesave);
-
-void loadfilepipe(unordered_map <int, Pipe>& PipeMap, ifstream& fileload);
-
-void DelStation(unordered_map <int, CompressorStation>& CSMap);
-
-void FindandFixStation(unordered_map <int, CompressorStation>& CSMap);
-
-void savefilestation(const unordered_map <int, CompressorStation>& CSMap, ofstream& filesave);
-
-void loadfilestation(unordered_map <int, CompressorStation>& CSMap, ifstream& fileload);
-
 void mainmenu() {
 	cout << "Введите одно из представленных чисел" << endl;
 	cout << "1 - Добавить трубу" << endl;
@@ -66,7 +53,7 @@ void mainmenu() {
 	cout << "7 - Загрузить" << endl;
 	cout << "8 - Удалить данные о трубах" << endl;
 	cout << "9 - Удалить данные о КС" << endl;
-	cout << "10 - Найти трубы в ремонте и выполнить пакетное редактирование" << endl;
+	cout << "10 - Найти трубы в ремонте и выполнить пакетное редактирование/удаление" << endl;
 	cout << "11 - Найти КС по названию, проценту задействованных цехов и выполнить пакетное редактирование" << endl;
 	cout << "0 - Выход" << endl << endl;
 }
@@ -79,38 +66,47 @@ void proverkamenu(const int& menu) {
 
 int main()
 {
-	setlocale(LC_ALL, "Russian");
+	setlocale(LC_ALL, "Russian"); 
+	Network seti;
 	int menu = 1;
-	unordered_map <int, Pipe> PipeMap;
-	unordered_map <int, CompressorStation> CSMap;
 	while (menu != 0) {
 		mainmenu();
-		menu = proverkavvoda(menu);
+		menu = proverkavvodaint();
 		proverkamenu(menu);
 		switch (menu) {
 			case 1: {
-				PipeMap.insert(pair <int, Pipe>(Pipe::id, Pipe()));
-				cin >> PipeMap[Pipe::id];
-				Pipe::id++;
+				//if (seti.PipeMap.count(Pipe::getid()) == 0) {
+				//	seti.PipeMap.insert(pair <int, Pipe>(Pipe::getid(), Pipe()));//getnextid
+				//	cin >> seti.PipeMap[Pipe::getid()];
+				//}
+				//else
+				//	cout << "Труба с таким ID уже присутствует, ID увеличено попробуйте добавить трубу снова" << endl;
+				//Pipe::id++;
+				seti.AddPipe();
 				break;
 			}
 			case 2: {
-				CSMap.insert(pair <int, CompressorStation>(CompressorStation::id, CompressorStation()));
-				cin >> CSMap[CompressorStation::id];
-				CompressorStation::id++;
+				/*if (seti.CSMap.count(CompressorStation::getid()) == 0) {
+					seti.CSMap.insert(pair <int, CompressorStation>(CompressorStation::getid(), CompressorStation()));
+					cin >> seti.CSMap[CompressorStation::getid()];
+				}
+				else
+					cout << "КС с таким ID уже присутствует, ID увеличено попробуйте добавить КС снова" << endl;
+				CompressorStation::id++;*/
+				seti.AddStation();
 				break;
 			}
 			case 3: {
-				cout << PipeMap;
-				cout << CSMap;
+				cout << seti.PipeMap;
+				cout << seti.CSMap;
 				break;
 			}
 			case 4: {
-				int i = -2;
+
 				cout << endl << "Введите ID трубы для редактирования: ";
-				i = proverkavvoda(i);
-				if (PipeMap.count(i) != 0) {
-					PipeMap[i].FixPipe(PipeMap,i);
+				int i = proverkavvodaint();//!!!!!!!!!!!!!!!!
+				if (seti.PipeMap.count(i) != 0) {
+					seti.PipeMap[i].FixPipe();
 				}
 				else {
 					cout << "Введите другое значение" << endl;
@@ -118,11 +114,10 @@ int main()
 				break;
 			}
 			case 5: {
-				int j = -2;
 				cout << endl << "Введите ID КС для редактирования: ";
-				j = proverkavvoda(j);
-				if (CSMap.count(j) != 0) {
-					CSMap[j].FixStation(CSMap,j);
+				int j = proverkavvodaint();
+				if (seti.CSMap.count(j) != 0) {
+					seti.CSMap[j].FixStation();
 				}
 				else {
 					cout << "Введите другое значение" << endl;
@@ -132,44 +127,49 @@ int main()
 			case 6: {
 				cout << endl << "Введите название файла: " << endl;
 				string filenam;
-				cin >> filenam;
-				ofstream filesave(filenam + ".txt");
-				savefilepipe(PipeMap, filesave);
-				savefilestation(CSMap, filesave);
-				filesave.close();
+				cin.ignore(32767, '\n');//https://ravesli.com/urok-57-vvedenie-v-std-string/
+				getline(cin, filenam);
+				ofstream filesave(filenam + ".txt");//!!!!!!!!!!!!!!!!!!!!!!
+				if (filesave.fail()) {
+					cout << "Файл для считывания информации не был создан" << endl;
+				}
+				else {
+					seti.savefile(filesave);
+					filesave.close();
+				}
 				break;
 			}
 			case 7: {
+				Pipe::id = 0;
+				CompressorStation::id = 0;
 				cout << endl << "Введите название файла: " << endl;
 				string filenam;
-				cin >> filenam;
-				ifstream fileload(filenam + ".txt");
+				cin.ignore(32767, '\n');//https://ravesli.com/urok-57-vvedenie-v-std-string/
+				getline(cin, filenam);
+				ifstream fileload(filenam + ".txt");//!!!!!!!!!!!!!!!!
 				if (fileload.fail()) {
 					cout << "Файл для считывания информации не был создан" << endl;
 				}
 				else {
-					loadfilepipe(PipeMap, fileload);
-					fileload.close(); 
-					ifstream fileload(filenam + ".txt");
-					loadfilestation(CSMap, fileload);
+					seti.loadfile(fileload);
 					fileload.close();
 				}
 				break;
 			}
 			case 8: {
-				DelPipe(PipeMap);
+				seti.DelPipe();
 				break;
 			}
 			case 9: {
-				DelStation(CSMap);
+				seti.DelStation();
 				break;
 			}
 			case 10: {
-				FindandFixPipe(PipeMap);
+				seti.FindandFixPipe();
 				break;
 			}
 			case 11: {
-				FindandFixStation(CSMap);
+				seti.FindandFixStation();
 				break;
 			}
 		}
