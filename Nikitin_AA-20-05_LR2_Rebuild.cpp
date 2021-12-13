@@ -75,24 +75,10 @@ int main()
 		proverkamenu(menu);
 		switch (menu) {
 			case 1: {
-				//if (seti.PipeMap.count(Pipe::getid()) == 0) {
-				//	seti.PipeMap.insert(pair <int, Pipe>(Pipe::getid(), Pipe()));//getnextid
-				//	cin >> seti.PipeMap[Pipe::getid()];
-				//}
-				//else
-				//	cout << "Труба с таким ID уже присутствует, ID увеличено попробуйте добавить трубу снова" << endl;
-				//Pipe::id++;
 				seti.AddPipe();
 				break;
 			}
 			case 2: {
-				/*if (seti.CSMap.count(CompressorStation::getid()) == 0) {
-					seti.CSMap.insert(pair <int, CompressorStation>(CompressorStation::getid(), CompressorStation()));
-					cin >> seti.CSMap[CompressorStation::getid()];
-				}
-				else
-					cout << "КС с таким ID уже присутствует, ID увеличено попробуйте добавить КС снова" << endl;
-				CompressorStation::id++;*/
 				seti.AddStation();
 				break;
 			}
@@ -104,7 +90,7 @@ int main()
 			case 4: {
 
 				cout << endl << "Введите ID трубы для редактирования: ";
-				int i = proverkavvodaint();//!!!!!!!!!!!!!!!!
+				int i = proverkavvodaint();
 				if (seti.PipeMap.count(i) != 0) {
 					seti.PipeMap[i].FixPipe();
 				}
@@ -129,7 +115,7 @@ int main()
 				string filenam;
 				cin.ignore(32767, '\n');//https://ravesli.com/urok-57-vvedenie-v-std-string/
 				getline(cin, filenam);
-				ofstream filesave(filenam + ".txt");//!!!!!!!!!!!!!!!!!!!!!!
+				ofstream filesave(filenam + ".txt");
 				if (filesave.fail()) {
 					cout << "Файл для считывания информации не был создан" << endl;
 				}
@@ -146,7 +132,7 @@ int main()
 				string filenam;
 				cin.ignore(32767, '\n');//https://ravesli.com/urok-57-vvedenie-v-std-string/
 				getline(cin, filenam);
-				ifstream fileload(filenam + ".txt");//!!!!!!!!!!!!!!!!
+				ifstream fileload(filenam + ".txt");
 				if (fileload.fail()) {
 					cout << "Файл для считывания информации не был создан" << endl;
 				}
